@@ -40,6 +40,26 @@ Aria OS is structured as a scalable monorepo:
 └── .github/        # CI/CD Pipelines
 ```
 
+### High-Level Data Flow
+
+```mermaid
+graph TD
+    Client[Client Apps: iOS/Android/Web/Desktop] --> APIGW[FastAPI Orchestrator]
+    
+    APIGW --> Agent[LangChain ReAct Agent]
+    
+    Agent --> LLM[Local Ollama: Llama 3]
+    Agent --> Memory[Memory System]
+    Agent --> Tools[Tool Registry]
+    
+    Memory --> VectorDB[(Vector DB: ChromaDB)]
+    Memory --> Buffer[(Short-Term Buffer)]
+    
+    Tools --> Math[calculate_math]
+    Tools --> Time[get_current_time]
+    Tools --> Custom[Extensible Python Scripts]
+```
+
 ---
 
 ## ⚙️ How It Works (Core Functions)
