@@ -23,7 +23,7 @@ No paid APIs. No cloud data harvesting. Just raw, localized intelligence.
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Architecture Layout
 
 Aria OS is structured as a scalable monorepo:
 
@@ -39,6 +39,30 @@ Aria OS is structured as a scalable monorepo:
 ├── docker-compose.yml
 └── .github/        # CI/CD Pipelines
 ```
+
+---
+
+## ⚙️ How It Works (Core Functions)
+
+Aria is fundamentally different from a standard stateless chatbot. She operates as a **ReAct (Reasoning + Acting) Agent**, meaning she actively "thinks" and uses tools to solve your requests securely and accurately.
+
+### 1. The Cognitive Loop (LangChain Agent)
+When you send a message, it is received by the FastAPI backend (`apps/api/main.py`). The core orchestrator initializes a LangChain Agent connected to a local Llama 3 model (via Ollama). 
+Instead of blindly predicting the next word, Aria reads your prompt, formulates an internal **Thought**, decides if she needs a **Tool**, executes the **Action** locally, analyzes the **Observation**, and finally formulates a natural language **Response**.
+
+### 2. Multi-Tiered Memory System (ChromaDB)
+To feel like a true personal assistant, Aria utilizes two distinct types of memory:
+- **Short-Term (Working Memory):** A standard conversational buffer that remembers the immediate back-and-forth context of your current chat session.
+- **Long-Term (Episodic Vector Memory):** Powered by **ChromaDB**. If you tell Aria a permanent fact (e.g., *"My dog's name is Buster"* or *"I am allergic to peanuts"*), she triggers a hidden tool that converts this text into mathematical vectors using HuggingFace embeddings (`all-MiniLM-L6-v2`). These vectors are saved to a local, encrypted database. The next time you ask a related question, she performs a semantic similarity search across her database, retrieves the fact, injects it into her brain's context window, and answers correctly.
+
+### 3. The Extensible Tool Registry
+Aria's abilities are entirely modular. Located in `packages/core_ai/tools/registry.py`, her capabilities are defined as simple Python functions decorated with `@tool`. 
+Currently, she has native access to:
+- `get_current_time`: Bypasses AI hallucination by fetching the exact system time.
+- `calculate_math`: Evaluates mathematical expressions deterministically.
+- `save_memory`: Instructs the agent to store user preferences into the Vector Database.
+
+Because of this Agentic registry, you can easily give Aria new "superpowers". Simply write a new Python function (e.g., `control_smart_lights` or `send_whatsapp_message`), add it to the registry array, and the LLM will automatically learn how and when to use it!
 
 ---
 
