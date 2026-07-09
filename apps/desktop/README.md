@@ -1,32 +1,34 @@
-# React + TypeScript + Vite
+# Aria OS - Desktop Client 💻
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+This is the native desktop client for **Aria OS**, scaffolding a high-performance **Vite + React** frontend designed to be seamlessly bundled with **Tauri**.
 
-Currently, two official plugins are available:
+## ⚙️ Application Workflow (Tauri Architecture)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Unlike the Web client, the Desktop client is meant to run continuously as a background OS process, acting as a deep system integration layer.
 
-## React Compiler
+1. **Native OS Hooks:** Using Tauri's Rust backend (to be implemented), this client can hook into global keyboard shortcuts (e.g., `Cmd+Space` to summon Aria), the system tray, and local file systems.
+2. **Local IPC (Inter-Process Communication):** The Vite React frontend communicates with the Rust backend to read local system states or parse documents.
+3. **Core Orchestration:** When an AI intent is required, the Desktop client proxies the request to the central **Aria API** (FastAPI).
+4. **Zero-Latency Execution:** Because everything (the Vite frontend, Tauri Rust backend, FastAPI, and Ollama) runs on the same local hardware, the entire network loop happens on `localhost`, ensuring lightning-fast responses with zero external data leakage.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🚀 Getting Started
 
-## Expanding the Oxlint configuration
+### Installation
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+```bash
+# Navigate to the desktop app directory
+cd apps/desktop
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+# Install dependencies
+npm install
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+### Running the Development Server (React Only)
+
+```bash
+npm run dev
+```
+*(This runs the React UI in the browser for rapid prototyping).*
+
+### Building for Tauri (Future Phase)
+Once the Tauri CLI is fully integrated, you will be able to compile this into a standalone `.dmg`, `.app`, or `.exe` binary that consumes less than 50MB of RAM.
