@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  aria-ollama:
+    image: ollama/ollama
+    container_name: aria-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    # Start server in background, pull model, then wait to keep container alive
+    entrypoint: /bin/sh -c "ollama serve & sleep 5 && ollama pull llama3 && wait"
+    networks:
+      - aria-network
+
+  aria-api:
+    build: 
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: aria-api
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_BASE_URL=http://aria-ollama:11434
+      - ENV=production
+    depends_on:
+      - aria-ollama
+    volumes:
+      - ./apps/api/chroma_db:/app/apps/api/chroma_db
+    networks:
+      - aria-network
+
+  aria-web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: aria-web
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000 # Accessed by client browser
+    depends_on:
+      - aria-api
+    networks:
+      - aria-network
+
+networks:
+  aria-network:
+    driver: bridge
+
+volumes:
+  ollama_data:
