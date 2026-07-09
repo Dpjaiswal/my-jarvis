@@ -4,6 +4,21 @@ This is the primary web-based interface for **Aria OS**, built using **Next.js 1
 
 ## ⚙️ Application Workflow
 
+```mermaid
+sequenceDiagram
+    participant User
+    participant NextJS as Web UI (Next.js)
+    participant API as Aria API (FastAPI)
+    participant Agent as LangChain Agent
+    
+    User->>NextJS: Types text message
+    NextJS->>API: POST /v1/chat {message}
+    API->>Agent: Process through ReAct
+    Agent-->>API: Final Response + Tool Used Data
+    API-->>NextJS: JSON {response, tool_used}
+    NextJS->>User: Renders Sleek Chat Bubble & Tool Tags
+```
+
 The Web Client is designed to be a lightweight presentation layer. It does not run any heavy AI models itself. 
 
 1. **User Input:** The user types a message into the polished UI.

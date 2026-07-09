@@ -4,6 +4,20 @@ This is the native desktop client for **Aria OS**, scaffolding a high-performanc
 
 ## ⚙️ Application Workflow (Tauri Architecture)
 
+```mermaid
+graph TD
+    User[User Input / Global Hotkey] --> Rust[Tauri Rust Backend]
+    Rust --> Vite[Vite React Frontend]
+    Vite --> LocalAPI[Localhost Aria API]
+    
+    subgraph "Native OS Layer"
+        Rust -.-> SystemTray[System Tray / Menubar]
+        Rust -.-> LocalFiles[Local Filesystem Sandboxed]
+    end
+    
+    LocalAPI --> Ollama[Local Ollama / Llama 3]
+```
+
 Unlike the Web client, the Desktop client is meant to run continuously as a background OS process, acting as a deep system integration layer.
 
 1. **Native OS Hooks:** Using Tauri's Rust backend (to be implemented), this client can hook into global keyboard shortcuts (e.g., `Cmd+Space` to summon Aria), the system tray, and local file systems.

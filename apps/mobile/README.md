@@ -4,6 +4,22 @@ This is the mobile client for **Aria OS**, built using **React Native** and **Ex
 
 ## ⚙️ Application Workflow
 
+```mermaid
+sequenceDiagram
+    participant User
+    participant App as Expo Mobile App
+    participant OS as Native iOS/Android OS
+    participant API as Remote Aria API
+    
+    User->>App: Taps Microphone Button
+    App->>OS: Capture Audio Stream (STT)
+    OS-->>App: Transcribed Text
+    App->>API: Send Text + Background Context (GPS)
+    API-->>App: LLM Text Response
+    App->>OS: Trigger Text-to-Speech (TTS)
+    OS->>User: Plays Voice Response
+```
+
 The mobile client focuses heavily on **Voice-First interaction** and **On-the-Go Context**.
 
 1. **Voice Input (STT):** The user triggers Aria via a mobile UI button. The app utilizes native device microphones (via Expo AV or native modules) to capture audio.
