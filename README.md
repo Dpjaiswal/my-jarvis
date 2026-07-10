@@ -1,8 +1,8 @@
-# Aria OS 🧠
+# Aria Ark-Reactor 🧠
 
-![Aria OS Banner](https://via.placeholder.com/1200x300.png?text=Aria+OS+-+Your+Offline,+100%25+Free+AI+Assistant)
+![Aria Ark-Reactor Banner](./apps/web/public/arc-reactor.png)
 
-**Aria OS** is an enterprise-grade, cross-platform AI Personal Assistant designed to be a seamless extension of your mind. Built from the ground up for absolute privacy and zero recurring costs, Aria runs entirely on your local hardware using offline LLMs (Llama 3) and local Vector Databases. 
+**Aria Ark-Reactor** is an enterprise-grade, cross-platform AI Personal Assistant designed to be a seamless extension of your mind. Built from the ground up for absolute privacy and zero recurring costs, Aria runs entirely on your local hardware using offline LLMs (Llama 3) and local Vector Databases. 
 
 No paid APIs. No cloud data harvesting. Just raw, localized intelligence.
 
